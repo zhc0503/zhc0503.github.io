@@ -9,7 +9,7 @@
     <link rel="apple-touch-icon" href="https://zhc0503.github.io/images/MeowLogo.jpg">
 
     <style>
-        /* 核心变量：继承主页的三色系统与昼夜设定 */
+        /* 核心变量 */
         :root {
             --bg-color: #f4f5f7;
             --card-bg: #ffffff;
@@ -43,7 +43,7 @@
             font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
-            max-width: 650px; 
+            max-width: 800px; /* 稍微放宽以容纳双列 */
             margin: 0 auto; 
             padding: 20px;
             line-height: 1.6;
@@ -57,7 +57,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* 顶部导航与护眼模式按钮 */
+        /* 导航与主题按钮 */
         .nav-header {
             display: flex;
             justify-content: space-between;
@@ -76,9 +76,7 @@
             transition: opacity 0.2s;
         }
 
-        .back-btn:active {
-            opacity: 0.6;
-        }
+        .back-btn:active { opacity: 0.6; }
 
         .theme-toggle {
             background-color: var(--btn-bg);
@@ -95,30 +93,31 @@
             box-shadow: var(--shadow-light);
         }
 
-        .theme-toggle:active {
-            transform: scale(0.9);
-        }
+        .theme-toggle:active { transform: scale(0.9); }
 
         .page-title {
+            text-align: center; /* 标题居中 */
             font-size: 28px;
             font-weight: 700;
-            margin-bottom: 30px;
-            padding-left: 10px;
+            margin-bottom: 50px;
         }
 
-        /* 时间轴核心结构 */
+        /* ==================== 
+           中轴时间线核心逻辑 
+           ==================== */
         .timeline {
             position: relative;
-            padding-left: 24px; /* 为左侧线条和节点留出空间 */
+            padding: 20px 0;
         }
 
-        /* 垂直基准线 */
+        /* 中央基准线 */
         .timeline::before {
             content: '';
             position: absolute;
             top: 0;
             bottom: 0;
-            left: 7px; /* 线条位置 */
+            left: 50%;
+            transform: translateX(-50%);
             width: 2px;
             background-color: var(--line-color);
             border-radius: 2px;
@@ -126,15 +125,40 @@
         }
 
         .timeline-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center; /* 让左右卡片与中心点垂直居中对抗 */
+            width: 100%;
+            margin-bottom: 40px;
             position: relative;
-            margin-bottom: 32px;
         }
 
-        /* 时间节点 (小圆点) */
+        /* 奇数项放左边，偶数项放右边 */
+        .timeline-item:nth-child(odd) { flex-direction: row; }
+        .timeline-item:nth-child(even) { flex-direction: row-reverse; }
+
+        /* 内容卡片宽度限制在 42% 左右，留出中间呼吸空间 */
+        .timeline-content {
+            width: 42%;
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 18px 20px;
+            box-shadow: var(--shadow-light);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
+            position: relative;
+        }
+
+        .timeline-content:active {
+            transform: scale(0.98);
+            box-shadow: var(--shadow-active);
+        }
+
+        /* 绝对居中的时间圆点 */
         .timeline-node {
             position: absolute;
-            top: 6px;
-            left: -24px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
             width: 16px;
             height: 16px;
             border-radius: 50%;
@@ -144,24 +168,9 @@
             transition: border-color 0.3s ease, background-color 0.3s ease;
         }
 
-        /* 节点色彩系统 */
         .timeline-node.system-blue { border-color: var(--color-blue); }
         .timeline-node.system-green { border-color: var(--color-green); }
         .timeline-node.system-red { border-color: var(--color-red); }
-
-        /* 内容卡片 */
-        .timeline-content {
-            background-color: var(--card-bg);
-            border-radius: 16px;
-            padding: 18px 20px;
-            box-shadow: var(--shadow-light);
-            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
-        }
-
-        .timeline-content:active {
-            transform: scale(0.98);
-            box-shadow: var(--shadow-active);
-        }
 
         .timeline-date {
             font-size: 13px;
@@ -184,14 +193,35 @@
             margin: 0;
             line-height: 1.5;
         }
+
+        /* ==================== 
+           极致移动端适配降级 
+           ==================== */
+        @media (max-width: 650px) {
+            .timeline::before {
+                left: 12px; /* 线条靠左 */
+                transform: none;
+            }
+            .timeline-item, .timeline-item:nth-child(odd), .timeline-item:nth-child(even) {
+                flex-direction: column;
+                align-items: flex-end; /* 卡片靠右 */
+                margin-bottom: 32px;
+            }
+            .timeline-content {
+                width: calc(100% - 36px); /* 占据除线条外的所有宽度 */
+            }
+            .timeline-node {
+                left: 12px;
+                top: 24px; /* 圆点上移 */
+                transform: translateX(-50%);
+            }
+        }
     </style>
 </head>
 <body>
 
     <header class="nav-header">
-        <a href="index.html" class="back-btn">
-            <span>←</span> 主页
-        </a>
+        <a href="index.html" class="back-btn"><span>←</span> 主页</a>
         <button class="theme-toggle" id="themeToggle" aria-label="Toggle Dark Mode">🌙</button>
     </header>
 
@@ -200,30 +230,30 @@
     <div class="timeline">
         
         <div class="timeline-item">
-            <div class="timeline-node system-blue"></div>
             <div class="timeline-content">
                 <div class="timeline-date">2026年 2月</div>
                 <h3 class="timeline-title">量化交易策略部署</h3>
                 <p class="timeline-desc">划定 $10,000 预算，正式启动并测试 ETH 自动化网格交易策略，探索加密资产的系统化增值路径。</p>
             </div>
+            <div class="timeline-node system-blue"></div>
         </div>
 
         <div class="timeline-item">
-            <div class="timeline-node system-green"></div>
             <div class="timeline-content">
                 <div class="timeline-date">2026年 1月</div>
                 <h3 class="timeline-title">第二大脑重构与迁移</h3>
                 <p class="timeline-desc">突破 OneNote 的结构限制，开始向 Logseq 与 Heptabase 迁移，确立“三色时间管理”的基础体系。</p>
             </div>
+            <div class="timeline-node system-green"></div>
         </div>
 
         <div class="timeline-item">
-            <div class="timeline-node system-red"></div>
             <div class="timeline-content">
                 <div class="timeline-date">2026年 1月</div>
                 <h3 class="timeline-title">生活网络与权益规划</h3>
                 <p class="timeline-desc">完成基于动态公网 IP 的香港 Home VPN 搭建，并系统性梳理了信用卡积分收益策略矩阵。</p>
             </div>
+            <div class="timeline-node system-red"></div>
         </div>
 
     </div>
