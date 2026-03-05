@@ -3,16 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Boss's Space</title>
+    <title>喵大人的主页</title>
+    
+    <link rel="icon" type="image/jpeg" href="https://zhc0503.github.io/images/MeowLogo.jpg">
+    <link rel="apple-touch-icon" href="https://zhc0503.github.io/images/MeowLogo.jpg">
+
     <style>
+        /* 优化3：统一定义全局变量，贯彻三色管理美学 */
         :root {
             --bg-color: #f4f5f7;
             --card-bg: #ffffff;
             --text-main: #1d1d1f;
             --text-sub: #86868b;
-            --color-red: #ff3b30;
-            --color-green: #34c759;
-            --color-blue: #007aff;
+            --color-blue: #007aff;  /* 事业/技术 */
+            --color-green: #34c759; /* 学习/成长 */
+            --color-red: #ff3b30;   /* 生活/休息 */
+            --shadow-light: 0 4px 16px rgba(0, 0, 0, 0.04);
+            --shadow-active: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
 
         * {
@@ -21,52 +28,58 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
             margin: 0;
             padding: 20px;
             line-height: 1.6;
+            animation: fadeIn 0.6s ease-out; /* 增加全局渐现动画 */
         }
 
-        /* 头部 Logo 与 个人简介 */
-        .header {
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 头部区域优化 */
+        .profile-header {
             text-align: center;
             padding: 40px 0 30px 0;
         }
 
-        .logo-container {
+        .avatar-container {
             width: 110px;
             height: 110px;
             margin: 0 auto;
-            border-radius: 35px; /* 圆角矩形风格更现代 */
+            border-radius: 35px;
             overflow: hidden;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
         }
 
-        .logo-container img {
+        .avatar-container img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: block;
         }
 
-        .name {
+        .profile-name {
             font-size: 26px;
             font-weight: 700;
-            margin-top: 18px;
+            margin-top: 20px;
             letter-spacing: 0.5px;
         }
 
-        .bio {
-            font-size: 15px;
+        .profile-bio {
+            font-size: 14px;
             color: var(--text-sub);
-            margin-top: 6px;
+            margin-top: 8px;
             padding: 0 20px;
         }
 
-        /* 模块卡片 */
-        .card-container {
+        /* 核心卡片区域 */
+        .content-grid {
             display: flex;
             flex-direction: column;
             gap: 16px;
@@ -76,8 +89,8 @@
         .card {
             background-color: var(--card-bg);
             border-radius: 20px;
-            padding: 22px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            padding: 24px;
+            box-shadow: var(--shadow-light);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
             position: relative;
             overflow: hidden;
@@ -85,9 +98,10 @@
 
         .card:active {
             transform: scale(0.98);
+            box-shadow: var(--shadow-active);
         }
 
-        /* 侧边颜色条 */
+        /* 纯粹的色彩隐喻 */
         .card::before {
             content: '';
             position: absolute;
@@ -96,11 +110,11 @@
             bottom: 0;
             width: 5px;
         }
-        .card.blue::before { background-color: var(--color-blue); }
-        .card.green::before { background-color: var(--color-green); }
-        .card.red::before { background-color: var(--color-red); }
+        .card.system-blue::before { background-color: var(--color-blue); }
+        .card.system-green::before { background-color: var(--color-green); }
+        .card.system-red::before { background-color: var(--color-red); }
 
-        .card-title {
+        .card-header {
             font-size: 18px;
             font-weight: 600;
             margin: 0 0 8px 0;
@@ -109,14 +123,14 @@
             gap: 8px;
         }
 
-        .card-desc {
+        .card-body {
             font-size: 14px;
             color: var(--text-sub);
-            margin: 0 0 14px 0;
+            margin: 0 0 16px 0;
         }
 
-        /* 标签系统 */
-        .tags {
+        /* 现代化标签系统 */
+        .tag-group {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
@@ -125,55 +139,54 @@
         .tag {
             font-size: 12px;
             font-weight: 500;
-            padding: 4px 10px;
+            padding: 5px 12px;
             background-color: var(--bg-color);
-            border-radius: 12px;
+            border-radius: 14px;
             color: var(--text-main);
         }
-
     </style>
 </head>
 <body>
 
-    <header class="header">
-        <div class="logo-container">
-            <img src="https://zhc0503.github.io/images/MeowLogo.jpg" alt="Meow Logo">
+    <header class="profile-header">
+        <div class="avatar-container">
+            <img src="https://zhc0503.github.io/images/MeowLogo.jpg" alt="喵大人的专属 Logo">
         </div>
-        <div class="name">Boss's Space</div>
-        <div class="bio">Digital Garden & TimeLine Hub</div>
+        <div class="profile-name">喵大人的主页</div>
+        <div class="profile-bio">构建中的第二大脑 · 数字系统运转枢纽</div>
     </header>
 
-    <main class="card-container">
+    <main class="content-grid">
         
-        <div class="card blue">
-            <h2 class="card-title">💻 Tech & Trading</h2>
-            <p class="card-desc">Automated grid strategies & Network routing configurations.</p>
-            <div class="tags">
-                <span class="tag">ETH</span>
-                <span class="tag">Solana</span>
+        <section class="card system-blue">
+            <h2 class="card-header">💻 技术与量化</h2>
+            <p class="card-body">专注 Web3 自动化网格策略开发，与极致的网络路由分流规则维护。</p>
+            <div class="tag-group">
+                <span class="tag">ETH / Solana</span>
                 <span class="tag">Quantumult X</span>
+                <span class="tag">GitHub Pages</span>
             </div>
-        </div>
+        </section>
 
-        <div class="card green">
-            <h2 class="card-title">🌱 Knowledge Base</h2>
-            <p class="card-desc">Building a decentralized second brain and capturing daily insights.</p>
-            <div class="tags">
+        <section class="card system-green">
+            <h2 class="card-header">🌱 知识与精进</h2>
+            <p class="card-body">打磨跨设备的去中心化知识库，构建坚韧的个人成长飞轮与语言环境。</p>
+            <div class="tag-group">
                 <span class="tag">Logseq</span>
                 <span class="tag">Heptabase</span>
-                <span class="tag">PKM</span>
+                <span class="tag">English Learning</span>
             </div>
-        </div>
+        </section>
 
-        <div class="card red">
-            <h2 class="card-title">☕ Life & Collections</h2>
-            <p class="card-desc">Exploring horology mechanics and soft companionship.</p>
-            <div class="tags">
+        <section class="card system-red">
+            <h2 class="card-header">☕ 生活与热爱</h2>
+            <p class="card-body">在钟表机械的滴答声中感受时间，在柔软毛绒的陪伴里恢复能量。</p>
+            <div class="tag-group">
                 <span class="tag">Horology</span>
                 <span class="tag">Jellycat</span>
-                <span class="tag">Credit Card Rewards</span>
+                <span class="tag">Credit Card Perks</span>
             </div>
-        </div>
+        </section>
 
     </main>
 
