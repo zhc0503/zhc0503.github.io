@@ -1,1 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>喵大人的主页</title>
+    
+    <link rel="icon" type="image/jpeg" href="https://zhc0503.github.io/images/MeowLogo.jpg">
+    <link rel="apple-touch-icon" href="https://zhc0503.github.io/images/MeowLogo.jpg">
 
+    <style>
+        /* 核心变量：日间模式 (默认) */
+        :root {
+            --bg-color: #f4f5f7;
+            --card-bg: #ffffff;
+            --text-main: #1d1d1f;
+            --text-sub: #86868b;
+            --color-blue: #007aff; 
+            --color-green: #34c759;
+            --color-red: #ff3b30;  
+            --shadow-light: 0 4px 16px rgba(0, 0, 0, 0.04);
+            --shadow-active: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --btn-bg: #e5e5ea;
+        }
+
+        /* 核心变量：护眼/深色模式 */
+        body.dark-mode {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-main: #f5f5f7;
+            --text-sub: #a1a1a6;
+            --shadow-light: 0 4px 16px rgba(0, 0, 0, 0.3);
+            --btn-bg: #333333;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            /* 电脑端居中优化：限制最大宽度并自动居中 */
+            max-width: 650px; 
+            margin: 0 auto; 
+            padding: 20px;
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease; /* 日夜切换平滑过渡 */
+            animation: fadeIn 0.6s ease-out;
+            position: relative; /* 为按钮定位做准备 */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 护眼模式切换按钮 */
+        .theme-toggle {
+            position: absolute;
+            top: 25px;
+            right: 20px;
+            background-color: var(--btn-bg);
+            border: none;
+            border-radius: 50%;
+            width: 42px;
+            height: 42px;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease, background-color 0.3s ease;
+            box-shadow: var(--shadow-light);
+            z-index: 100;
+        }
+
+        .theme-toggle:active {
+            transform: scale(0.9);
+        }
+
+        /* 头部区域 */
+        .profile-header {
+            text-align: center;
+            padding: 40px 0 30px 0;
+            margin-top: 20px;
+        }
+
+        .avatar-container {
+            width: 110px;
+            height: 110px;
+            margin: 0 auto;
+            border-radius: 35px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .avatar-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .profile-name {
+            font-size: 26px;
+            font-weight: 700;
+            margin-top: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        .profile-bio {
+            font-size: 14px;
+            color: var(--text-sub);
+            margin-top: 8px;
+            padding: 0 20px;
+        }
+
+        /* 卡片区域 */
+        .content-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            padding-bottom: 40px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: var(--shadow-light);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:active {
+            transform: scale(0.98);
+            box-shadow: var(--shadow-active);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 5px;
+        }
+        .card.system-blue::before { background-color: var(--color-blue); }
+        .card.system-green::before { background-color: var(--color-green); }
+        .card.system-red::before { background-color: var(--color-red); }
+
+        .card-header {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0 0 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-body {
+            font-size: 14px;
+            color: var(--text-sub);
+            margin: 0 0 16px 0;
+        }
+
+        .tag-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tag {
+            font-size: 12px;
+            font-weight: 500;
+            padding: 5px 12px;
+            background-color: var(--bg-color);
+            border-radius: 14px;
+            color: var(--text-main);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle Dark Mode">
+        🌙
+    </button>
+
+    <header class="profile-header">
+        <div class="avatar-container">
+            <img src="https://zhc0503.github.io/images/MeowLogo.jpg" alt="喵大人的专属 Logo">
+        </div>
+        <div class="profile-name">喵大人的主页</div>
+        <div class="profile-bio">构建中的第二大脑 · 数字系统运转枢纽</div>
+    </header>
+
+    <main class="content-grid">
+        <section class="card system-blue">
+            <h2 class="card-header">💻 技术与量化</h2>
+            <p class="card-body">专注 Web3 自动化网格策略开发，与极致的网络路由分流规则维护。</p>
+            <div class="tag-group">
+                <span class="tag">ETH / Solana</span>
+                <span class="tag">Quantumult X</span>
+                <span class="tag">GitHub Pages</span>
+            </div>
+        </section>
+
+        <section class="card system-green">
+            <h2 class="card-header">🌱 知识与精进</h2>
+            <p class="card-body">打磨跨设备的去中心化知识库，构建坚韧的个人成长飞轮与语言环境。</p>
+            <div class="tag-group">
+                <span class="tag">Logseq</span>
+                <span class="tag">Heptabase</span>
+                <span class="tag">English Learning</span>
+            </div>
+        </section>
+
+        <section class="card system-red">
+            <h2 class="card-header">☕ 生活与热爱</h2>
+            <p class="card-body">在钟表机械的滴答声中感受时间，在柔软毛绒的陪伴里恢复能量。</p>
+            <div class="tag-group">
+                <span class="tag">Horology</span>
+                <span class="tag">Jellycat</span>
+                <span class="tag">Credit Card Perks</span>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const themeToggleBtn = document.getElementById('themeToggle');
+        const body = document.body;
+
+        // 检查本地存储中的主题偏好
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            body.classList.add('dark-mode');
+            themeToggleBtn.innerText = '☀️';
+        }
+
+        // 点击事件监听
+        themeToggleBtn.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            
+            // 动态切换图标并保存偏好
+            if (body.classList.contains('dark-mode')) {
+                themeToggleBtn.innerText = '☀️';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeToggleBtn.innerText = '🌙';
+                localStorage.setItem('theme', 'light');
+            }
+        });
+    </script>
+</body>
+</html>
