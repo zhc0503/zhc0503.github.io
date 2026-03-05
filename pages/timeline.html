@@ -1,1 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>时间轴 - 喵大人的主页</title>
+    
+    <link rel="icon" type="image/jpeg" href="https://zhc0503.github.io/images/MeowLogo.jpg">
+    <link rel="apple-touch-icon" href="https://zhc0503.github.io/images/MeowLogo.jpg">
 
+    <style>
+        /* 核心变量：继承主页的三色系统与昼夜设定 */
+        :root {
+            --bg-color: #f4f5f7;
+            --card-bg: #ffffff;
+            --text-main: #1d1d1f;
+            --text-sub: #86868b;
+            --line-color: #d1d1d6;
+            --color-blue: #007aff; 
+            --color-green: #34c759;
+            --color-red: #ff3b30;  
+            --shadow-light: 0 4px 16px rgba(0, 0, 0, 0.04);
+            --shadow-active: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --btn-bg: #e5e5ea;
+        }
+
+        body.dark-mode {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-main: #f5f5f7;
+            --text-sub: #a1a1a6;
+            --line-color: #333333;
+            --shadow-light: 0 4px 16px rgba(0, 0, 0, 0.3);
+            --btn-bg: #333333;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            max-width: 650px; 
+            margin: 0 auto; 
+            padding: 20px;
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            animation: fadeIn 0.6s ease-out;
+            position: relative;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 顶部导航与护眼模式按钮 */
+        .nav-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0 40px 0;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: opacity 0.2s;
+        }
+
+        .back-btn:active {
+            opacity: 0.6;
+        }
+
+        .theme-toggle {
+            background-color: var(--btn-bg);
+            border: none;
+            border-radius: 50%;
+            width: 42px;
+            height: 42px;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease, background-color 0.3s ease;
+            box-shadow: var(--shadow-light);
+        }
+
+        .theme-toggle:active {
+            transform: scale(0.9);
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            padding-left: 10px;
+        }
+
+        /* 时间轴核心结构 */
+        .timeline {
+            position: relative;
+            padding-left: 24px; /* 为左侧线条和节点留出空间 */
+        }
+
+        /* 垂直基准线 */
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 7px; /* 线条位置 */
+            width: 2px;
+            background-color: var(--line-color);
+            border-radius: 2px;
+            transition: background-color 0.3s ease;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 32px;
+        }
+
+        /* 时间节点 (小圆点) */
+        .timeline-node {
+            position: absolute;
+            top: 6px;
+            left: -24px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: var(--card-bg);
+            border: 4px solid var(--text-main);
+            z-index: 1;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+        }
+
+        /* 节点色彩系统 */
+        .timeline-node.system-blue { border-color: var(--color-blue); }
+        .timeline-node.system-green { border-color: var(--color-green); }
+        .timeline-node.system-red { border-color: var(--color-red); }
+
+        /* 内容卡片 */
+        .timeline-content {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 18px 20px;
+            box-shadow: var(--shadow-light);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
+        }
+
+        .timeline-content:active {
+            transform: scale(0.98);
+            box-shadow: var(--shadow-active);
+        }
+
+        .timeline-date {
+            font-size: 13px;
+            color: var(--text-sub);
+            font-weight: 600;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .timeline-title {
+            font-size: 17px;
+            font-weight: 600;
+            margin: 0 0 8px 0;
+            color: var(--text-main);
+        }
+
+        .timeline-desc {
+            font-size: 14px;
+            color: var(--text-sub);
+            margin: 0;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="nav-header">
+        <a href="index.html" class="back-btn">
+            <span>←</span> 主页
+        </a>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle Dark Mode">🌙</button>
+    </header>
+
+    <h1 class="page-title">里程碑</h1>
+
+    <div class="timeline">
+        
+        <div class="timeline-item">
+            <div class="timeline-node system-blue"></div>
+            <div class="timeline-content">
+                <div class="timeline-date">2026年 2月</div>
+                <h3 class="timeline-title">量化交易策略部署</h3>
+                <p class="timeline-desc">划定 $10,000 预算，正式启动并测试 ETH 自动化网格交易策略，探索加密资产的系统化增值路径。</p>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-node system-green"></div>
+            <div class="timeline-content">
+                <div class="timeline-date">2026年 1月</div>
+                <h3 class="timeline-title">第二大脑重构与迁移</h3>
+                <p class="timeline-desc">突破 OneNote 的结构限制，开始向 Logseq 与 Heptabase 迁移，确立“三色时间管理”的基础体系。</p>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-node system-red"></div>
+            <div class="timeline-content">
+                <div class="timeline-date">2026年 1月</div>
+                <h3 class="timeline-title">生活网络与权益规划</h3>
+                <p class="timeline-desc">完成基于动态公网 IP 的香港 Home VPN 搭建，并系统性梳理了信用卡积分收益策略矩阵。</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const themeToggleBtn = document.getElementById('themeToggle');
+        const body = document.body;
+
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            body.classList.add('dark-mode');
+            themeToggleBtn.innerText = '☀️';
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            if (body.classList.contains('dark-mode')) {
+                themeToggleBtn.innerText = '☀️';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeToggleBtn.innerText = '🌙';
+                localStorage.setItem('theme', 'light');
+            }
+        });
+    </script>
+</body>
+</html>
