@@ -4,153 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>喵大人的主页</title>
-    
-    <link rel="icon" type="image/jpeg" href="https://zhc0503.github.io/images/MeowLogo.jpg">
-    <link rel="apple-touch-icon" href="https://zhc0503.github.io/images/MeowLogo.jpg">
-
-    <style>
-        /* 优化3：统一定义全局变量，贯彻三色管理美学 */
-        :root {
-            --bg-color: #f4f5f7;
-            --card-bg: #ffffff;
-            --text-main: #1d1d1f;
-            --text-sub: #86868b;
-            --color-blue: #007aff;  /* 事业/技术 */
-            --color-green: #34c759; /* 学习/成长 */
-            --color-red: #ff3b30;   /* 生活/休息 */
-            --shadow-light: 0 4px 16px rgba(0, 0, 0, 0.04);
-            --shadow-active: 0 2px 8px rgba(0, 0, 0, 0.08);
-        }
-
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            margin: 0;
-            padding: 20px;
-            line-height: 1.6;
-            animation: fadeIn 0.6s ease-out; /* 增加全局渐现动画 */
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* 头部区域优化 */
-        .profile-header {
-            text-align: center;
-            padding: 40px 0 30px 0;
-        }
-
-        .avatar-container {
-            width: 110px;
-            height: 110px;
-            margin: 0 auto;
-            border-radius: 35px;
-            overflow: hidden;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-        }
-
-        .avatar-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .profile-name {
-            font-size: 26px;
-            font-weight: 700;
-            margin-top: 20px;
-            letter-spacing: 0.5px;
-        }
-
-        .profile-bio {
-            font-size: 14px;
-            color: var(--text-sub);
-            margin-top: 8px;
-            padding: 0 20px;
-        }
-
-        /* 核心卡片区域 */
-        .content-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            padding-bottom: 40px;
-        }
-
-        .card {
-            background-color: var(--card-bg);
-            border-radius: 20px;
-            padding: 24px;
-            box-shadow: var(--shadow-light);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card:active {
-            transform: scale(0.98);
-            box-shadow: var(--shadow-active);
-        }
-
-        /* 纯粹的色彩隐喻 */
-        .card::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 5px;
-        }
-        .card.system-blue::before { background-color: var(--color-blue); }
-        .card.system-green::before { background-color: var(--color-green); }
-        .card.system-red::before { background-color: var(--color-red); }
-
-        .card-header {
-            font-size: 18px;
-            font-weight: 600;
-            margin: 0 0 8px 0;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .card-body {
-            font-size: 14px;
-            color: var(--text-sub);
-            margin: 0 0 16px 0;
-        }
-
-        /* 现代化标签系统 */
-        .tag-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .tag {
-            font-size: 12px;
-            font-weight: 500;
-            padding: 5px 12px;
-            background-color: var(--bg-color);
-            border-radius: 14px;
-            color: var(--text-main);
-        }
-    </style>
+    <link rel="icon" type="image/jpeg" href="images/MeowLogo.jpg">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
+    <!-- 顶部导航栏 -->
+    <nav class="top-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">喵大人的主页</a>
+            <div class="nav-links">
+                <a href="index.html" class="active">主页</a>
+                <a href="pages/articles.html">精华文章</a>
+                <a href="pages/links.html">推荐链接</a>
+                <a href="pages/contact.html">联系方式</a>
+            </div>
+        </div>
+    </nav>
+
     <header class="profile-header">
         <div class="avatar-container">
-            <img src="https://zhc0503.github.io/images/MeowLogo.jpg" alt="喵大人的专属 Logo">
+            <img src="images/MeowLogo.jpg" alt="喵大人的专属 Logo">
         </div>
         <div class="profile-name">喵大人的主页</div>
         <div class="profile-bio">构建中的第二大脑 · 数字系统运转枢纽</div>
@@ -158,15 +32,13 @@
 
     <main class="content-grid">
         
-        <section class="card system-blue">
-            <h2 class="card-header">💻 技术与量化</h2>
-            <p class="card-body">专注 Web3 自动化网格策略开发，与极致的网络路由分流规则维护。</p>
+        <a href="pages/articles.html" class="card system-blue">
+            <h2 class="card-header">📝 精华文章</h2>
+            <p class="card-body">记录关于 Web3、量化策略与知识管理的深度思考。</p>
             <div class="tag-group">
-                <span class="tag">ETH / Solana</span>
-                <span class="tag">Quantumult X</span>
-                <span class="tag">GitHub Pages</span>
+                <span class="tag">查看全部文章 →</span>
             </div>
-        </section>
+        </a>
 
         <section class="card system-green">
             <h2 class="card-header">🌱 知识与精进</h2>
@@ -187,7 +59,6 @@
                 <span class="tag">Credit Card Perks</span>
             </div>
         </section>
-
     </main>
 
 </body>
